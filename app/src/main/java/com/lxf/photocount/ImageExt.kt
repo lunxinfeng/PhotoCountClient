@@ -13,13 +13,14 @@ fun ImageProxy.toBitmap(): Bitmap {
     return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 }
 
-fun ImageProxy.toBitmap608(): Bitmap {
+fun ImageProxy.toBitmap608(rotate: Float): Bitmap {
     val bitmap = toBitmap()
 
-//    val matrix = Matrix().apply {
-//        this.setScale(0.5f, 0.5f)
-//    }
-//    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    val matrix = Matrix().apply {
+        this.setScale(608f / bitmap.width, 608f / bitmap.height)
+        this.setRotate(rotate)
+    }
+    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
 
-    return Bitmap.createScaledBitmap(bitmap, 608, 608, true)
+//    return Bitmap.createScaledBitmap(bitmap, 608, 608, true)
 }

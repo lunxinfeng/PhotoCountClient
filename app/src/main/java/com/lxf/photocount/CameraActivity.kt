@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Size
+import android.view.Surface
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -45,6 +46,8 @@ class CameraActivity : AppCompatActivity() {
 
             imageCapture = ImageCapture.Builder()
                 .setTargetResolution(Size(800, 800))
+//                .setTargetRotation(getRotation(this, "0"))
+//                .setTargetRotation(Surface.ROTATION_90)
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
                 .build()
 
@@ -103,7 +106,7 @@ class CameraActivity : AppCompatActivity() {
         imageCapture.takePicture(
             ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
-                    image.toBitmap608()
+                    image.toBitmap608(image.imageInfo.rotationDegrees.toFloat())
                         .compress(
                             Bitmap.CompressFormat.JPEG,
                             100,
