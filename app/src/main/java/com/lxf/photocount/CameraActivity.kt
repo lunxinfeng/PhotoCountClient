@@ -2,13 +2,15 @@ package com.lxf.photocount
 
 import android.content.Intent
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
 import com.lxf.photocount.databinding.ActivityCameraBinding
 import java.io.File
+
 
 class CameraActivity : AppCompatActivity() {
     private var preview: Preview? = null
@@ -60,7 +62,16 @@ class CameraActivity : AppCompatActivity() {
                 camera = cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture
                 )
+
                 preview?.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+
+
+                val zoomState: LiveData<ZoomState> = camera?.cameraInfo?.zoomState?: return@Runnable
+                println("处理${zoomState.value!!.minZoomRatio}")
+                println("处理${zoomState.value!!.maxZoomRatio}")
+                println("处理${zoomState.value!!.zoomRatio}")
+                println("处理${zoomState.value!!.linearZoom}")
+                camera?.cameraControl?.setZoomRatio(zoomState.value!!.minZoomRatio)
             } catch (exc: Exception) {
                 exc.printStackTrace()
             }
@@ -106,9 +117,6 @@ class CameraActivity : AppCompatActivity() {
                     image.toBitmap608(
                         binding.viewFinder.width,
                         binding.viewFinder.height,
-                        binding.preView.getLeftDistance().toInt(),
-                        binding.preView.getTopDistance().toInt(),
-                        binding.preView.getSize().toInt(),
                         image.imageInfo.rotationDegrees.toFloat()
                     )
                         .compress(
