@@ -4,8 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Size
-import android.view.Surface
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -21,7 +19,6 @@ class CameraActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -41,11 +38,11 @@ class CameraActivity : AppCompatActivity() {
 
             // Preview
             preview = Preview.Builder()
-                .setTargetResolution(Size(800, 800))
+//                .setTargetResolution(Size(800, 800))
                 .build()
 
             imageCapture = ImageCapture.Builder()
-                .setTargetResolution(Size(800, 800))
+//                .setTargetResolution(Size(800, 800))
 //                .setTargetRotation(getRotation(this, "0"))
 //                .setTargetRotation(Surface.ROTATION_90)
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
@@ -106,7 +103,14 @@ class CameraActivity : AppCompatActivity() {
         imageCapture.takePicture(
             ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
-                    image.toBitmap608(image.imageInfo.rotationDegrees.toFloat())
+                    image.toBitmap608(
+                        binding.viewFinder.width,
+                        binding.viewFinder.height,
+                        binding.preView.getLeftDistance().toInt(),
+                        binding.preView.getTopDistance().toInt(),
+                        binding.preView.getSize().toInt(),
+                        image.imageInfo.rotationDegrees.toFloat()
+                    )
                         .compress(
                             Bitmap.CompressFormat.JPEG,
                             100,
