@@ -67,10 +67,6 @@ class CameraActivity : AppCompatActivity() {
 
 
                 val zoomState: LiveData<ZoomState> = camera?.cameraInfo?.zoomState?: return@Runnable
-                println("处理${zoomState.value!!.minZoomRatio}")
-                println("处理${zoomState.value!!.maxZoomRatio}")
-                println("处理${zoomState.value!!.zoomRatio}")
-                println("处理${zoomState.value!!.linearZoom}")
                 camera?.cameraControl?.setZoomRatio(zoomState.value!!.minZoomRatio)
             } catch (exc: Exception) {
                 exc.printStackTrace()
@@ -114,6 +110,10 @@ class CameraActivity : AppCompatActivity() {
         imageCapture.takePicture(
             ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
+                    println("ceshi:${image.format}")
+                    println("ceshi:${image.planes.size}")
+                    println("ceshi:${image.planes}")
+                    println("ceshi:${image.planes[0]}")
                     image.toBitmap608(
                         binding.viewFinder.width,
                         binding.viewFinder.height,

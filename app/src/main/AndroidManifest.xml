@@ -18,9 +18,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PhotoCountClient">
-        <activity android:name=".PhotoActivity"/>
+        <activity android:name=".PhotoActivity" />
         <activity android:name=".ResultActivity" />
-        <activity android:name=".CameraActivity" android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".CameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

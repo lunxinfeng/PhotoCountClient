@@ -7,9 +7,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.slf4j.LoggerFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
+import retrofit2.http.*
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -17,6 +15,9 @@ interface Api {
     @Multipart
     @POST("/photo_count/")
     suspend fun photoCount(@Part part: MultipartBody.Part): Map<String, String>
+
+    @GET("/error_up/{image_name}")
+    suspend fun errorUp(@Path("image_name") imageName:String): Map<String, String>
 }
 
 object Http {
@@ -42,7 +43,7 @@ object Http {
 
     suspend fun photoCount(file: File): Map<String, String> {
         val requestBody = file.asRequestBody(MultipartBody.FORM)
-        val part = MultipartBody.Part.createFormData("image",file.name,requestBody)
+        val part = MultipartBody.Part.createFormData("image", file.name, requestBody)
 
         return api.photoCount(part)
     }
