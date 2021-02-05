@@ -2,6 +2,7 @@ package com.lxf.photocount
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.ImageFormat
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.*
@@ -47,6 +48,7 @@ class CameraActivity : AppCompatActivity() {
 //                .setTargetResolution(Size(800, 800))
 //                .setTargetRotation(getRotation(this, "0"))
 //                .setTargetRotation(Surface.ROTATION_90)
+                .setBufferFormat(ImageFormat.YUV_420_888)
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
                 .build()
 
@@ -66,7 +68,8 @@ class CameraActivity : AppCompatActivity() {
                 preview?.setSurfaceProvider(binding.viewFinder.surfaceProvider)
 
 
-                val zoomState: LiveData<ZoomState> = camera?.cameraInfo?.zoomState?: return@Runnable
+                val zoomState: LiveData<ZoomState> =
+                    camera?.cameraInfo?.zoomState ?: return@Runnable
                 camera?.cameraControl?.setZoomRatio(zoomState.value!!.minZoomRatio)
             } catch (exc: Exception) {
                 exc.printStackTrace()
@@ -103,17 +106,17 @@ class CameraActivity : AppCompatActivity() {
 //                    val msg = "Photo capture succeeded: $savedUri"
 //                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
 //
-//                    model.photoCount(photoFile)
+//                    val intent = Intent(this@CameraActivity, PhotoActivity::class.java)
+//                    intent.putExtra("photoPath", photoFile.absolutePath)
+//                    startActivity(intent)
+//
+////                    model.photoCount(photoFile)
 //                }
 //            })
 
         imageCapture.takePicture(
             ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
-                    println("ceshi:${image.format}")
-                    println("ceshi:${image.planes.size}")
-                    println("ceshi:${image.planes}")
-                    println("ceshi:${image.planes[0]}")
                     image.toBitmap608(
                         binding.viewFinder.width,
                         binding.viewFinder.height,
@@ -124,11 +127,13 @@ class CameraActivity : AppCompatActivity() {
                             100,
                             photoFile.outputStream()
                         )
-                    super.onCaptureSuccess(image)
+
 
                     val intent = Intent(this@CameraActivity, PhotoActivity::class.java)
                     intent.putExtra("photoPath", photoFile.absolutePath)
                     startActivity(intent)
+
+                    super.onCaptureSuccess(image)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
