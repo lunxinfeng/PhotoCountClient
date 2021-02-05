@@ -17,7 +17,10 @@ interface Api {
     suspend fun photoCount(@Part part: MultipartBody.Part): Map<String, String>
 
     @GET("/error_up/{image_name}")
-    suspend fun errorUp(@Path("image_name") imageName:String): Map<String, String>
+    suspend fun errorUp(@Path("image_name") imageName: String): Map<String, String>
+
+    @POST
+    suspend fun situation(@Url url: String, @Body requestModel: RequestModel): ResponseModel
 }
 
 object Http {

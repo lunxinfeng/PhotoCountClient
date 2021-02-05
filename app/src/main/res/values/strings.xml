@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">拍照识别</string>
     <string name="error_up">识别错误上报</string>
+    <string name="situation">形势</string>
 </resources>

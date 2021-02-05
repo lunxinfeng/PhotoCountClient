@@ -6,4 +6,9 @@
         android:icon="@mipmap/logo"
         android:title="@string/error_up"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_situation"
+        android:icon="@mipmap/situation"
+        android:title="@string/situation"
+        app:showAsAction="ifRoom"/>
 </menu>
