@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.izis.bean.SituationResult
 import com.google.gson.Gson
+import com.lxf.photocount.http.ApiResponse
 import com.lxf.photocount.http.Http
 import com.lxf.photocount.http.RequestModel
+import com.lxf.photocount.http.http
 import kotlinx.coroutines.launch
 import java.io.File
 import java.lang.Exception
@@ -14,19 +16,20 @@ import java.lang.Exception
 class ResultViewModel : ViewModel() {
 
     val photoPath = MutableLiveData<String>()
-    val errorUpResult = MutableLiveData<Int>()
     val situationResult = MutableLiveData<SituationResult>()
+    val toastMessage = MutableLiveData<String>()
 
     fun errorUp(file: File) {
         photoPath.value = file.absolutePath.toString()
         viewModelScope.launch {
-            try {
-                val map = Http.api.errorUp(file.name)
-                errorUpResult.value = map["result"]?.toIntOrNull() ?: 0
-            } catch (e: Exception) {
-                e.printStackTrace()
-                errorUpResult.value = 0
+            val data = http {
+                Http.api.errorUp(file.name)
             }
+            if (data.code == ApiResponse.CODE_ERROR){
+                toastMessage.value = data.msg
+                return@launch
+            }
+            toastMessage.value = "上报成功"
         }
     }
 
@@ -45,6 +48,7 @@ class ResultViewModel : ViewModel() {
                 this@ResultViewModel.situationResult.value = situationResult
             }catch (e:Exception){
                 e.printStackTrace()
+                toastMessage.value = e.message
                 this@ResultViewModel.situationResult.value = null
             }
         }

@@ -16,6 +16,7 @@ import java.io.File
 class CameraActivity : AppCompatActivity() {
     private var preview: Preview? = null
     private var imageCapture: ImageCapture? = null
+    private var imageAnalysis: ImageAnalysis? = null
     private var camera: Camera? = null
 
     private lateinit var binding: ActivityCameraBinding
@@ -48,9 +49,13 @@ class CameraActivity : AppCompatActivity() {
 //                .setTargetResolution(Size(800, 800))
 //                .setTargetRotation(getRotation(this, "0"))
 //                .setTargetRotation(Surface.ROTATION_90)
-                .setBufferFormat(ImageFormat.YUV_420_888)
+//                .setBufferFormat(ImageFormat.YUV_420_888)
                 .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
                 .build()
+
+            imageAnalysis = ImageAnalysis.Builder()
+                .build()
+
 
             // Select back camera
             val cameraSelector =
@@ -117,6 +122,8 @@ class CameraActivity : AppCompatActivity() {
         imageCapture.takePicture(
             ContextCompat.getMainExecutor(this), object : ImageCapture.OnImageCapturedCallback() {
                 override fun onCaptureSuccess(image: ImageProxy) {
+                    println("ceshi:${image.imageInfo.rotationDegrees}")
+                    println("ceshi:${image.format}")
                     image.toBitmap608(
                         binding.viewFinder.width,
                         binding.viewFinder.height,

@@ -14,10 +14,10 @@ import java.util.concurrent.TimeUnit
 interface Api {
     @Multipart
     @POST("/photo_count/")
-    suspend fun photoCount(@Part part: MultipartBody.Part): Map<String, String>
+    suspend fun photoCount(@Part part: MultipartBody.Part): HttpResponse<Map<String, String>>
 
     @GET("/error_up/{image_name}")
-    suspend fun errorUp(@Path("image_name") imageName: String): Map<String, String>
+    suspend fun errorUp(@Path("image_name") imageName: String): HttpResponse<Map<String, String>>
 
     @POST
     suspend fun situation(@Url url: String, @Body requestModel: RequestModel): ResponseModel
@@ -38,13 +38,13 @@ object Http {
     private val retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
-//        .baseUrl("http://192.168.168.145:8888/")
-        .baseUrl("http://116.62.153.52:8888/")
+        .baseUrl("http://192.168.168.145:8888/")
+//        .baseUrl("http://116.62.153.52:8888/")
         .build()
 
     val api: Api = retrofit.create(Api::class.java)
 
-    suspend fun photoCount(file: File): Map<String, String> {
+    suspend fun photoCount(file: File): HttpResponse<Map<String, String>> {
         val requestBody = file.asRequestBody(MultipartBody.FORM)
         val part = MultipartBody.Part.createFormData("image", file.name, requestBody)
 

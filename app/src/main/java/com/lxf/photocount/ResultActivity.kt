@@ -30,20 +30,21 @@ class ResultActivity : AppCompatActivity() {
         }
         binding.imageView.setImageBitmap(BitmapFactory.decodeFile(photoPath))
 
-        model.errorUpResult.observe(this, Observer {
-            if (it == 0)
-                Toast.makeText(this, "上报失败", Toast.LENGTH_SHORT).show()
-            else
-                Toast.makeText(this, "上报成功", Toast.LENGTH_SHORT).show()
+        model.toastMessage.observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })
 
         model.situationResult.observe(this, Observer {
-            if (it == null){
+            if (it == null) {
                 Toast.makeText(this, "请求失败", Toast.LENGTH_SHORT).show()
                 return@Observer
             }
             binding.chessView.markPiece(it.board_state)
-            binding.tvResult.text = "白方胜率：${String.format("%.2f",it.whiteWinRate * 100)}%\n白方领先：${String.format("%.2f",it.whiteWinScore)}目"
+            binding.tvResult.text =
+                "白方胜率：${String.format("%.2f", it.whiteWinRate * 100)}%\n白方领先：${String.format(
+                    "%.2f",
+                    it.whiteWinScore
+                )}目"
         })
     }
 
@@ -73,9 +74,9 @@ class ResultActivity : AppCompatActivity() {
 
         var value: Int
         val sgf = StringBuilder("")
-        for (i in 1 .. boardSize) {
-            for (j in 1 .. boardSize) {
-                value = chessArray[i-1][j-1]
+        for (i in 1..boardSize) {
+            for (j in 1..boardSize) {
+                value = chessArray[i - 1][j - 1]
                 when (value) {
                     1 -> {
                         sgf.append("+")
