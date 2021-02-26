@@ -29,7 +29,6 @@ class ChessView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 chessArray[j][i] = chess[index].toString().toInt()
             }
         }
-
         invalidate()
     }
 
@@ -104,7 +103,38 @@ class ChessView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                             paint
                         )
                     }
-                    3 -> {
+                    3, 4, 5, 6 -> {
+                        when (chessArray[i][j]){
+                            4 -> {
+                                paint.color = Color.BLACK
+                                canvas?.drawCircle(
+                                    i * size + size / 2,
+                                    j * size + size / 2,
+                                    size / 2,
+                                    paint
+                                )
+                            }
+                            5->{
+                                paint.color = Color.BLACK
+                                paint.strokeWidth = 1.5f
+                                paint.style = Paint.Style.STROKE
+                                canvas?.drawCircle(
+                                    i * size + size / 2,
+                                    j * size + size / 2,
+                                    size / 2,
+                                    paint
+                                )
+
+                                paint.style = Paint.Style.FILL
+                                paint.color = Color.WHITE
+                                canvas?.drawCircle(
+                                    i * size + size / 2,
+                                    j * size + size / 2,
+                                    size / 2,
+                                    paint
+                                )
+                            }
+                        }
                         paint.color = Color.RED
                         canvas?.drawRect(
                             i * size + 10,
