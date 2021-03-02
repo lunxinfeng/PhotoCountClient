@@ -39,7 +39,8 @@ object Http {
         .client(client)
         .addConverterFactory(GsonConverterFactory.create())
 //        .baseUrl("http://192.168.168.145:8888/")
-        .baseUrl("http://116.62.153.52:8888/")
+//        .baseUrl("http://116.62.153.52:8888/")
+        .baseUrl("http://47.106.154.128:8888/")
         .build()
 
     val api: Api = retrofit.create(Api::class.java)
